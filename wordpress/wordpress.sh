@@ -16,9 +16,10 @@ if [ ! -d /var/www/wordpress ]; then
 	unzip latest.zip > /dev/null
 	cd /var/www/wordpress
 	cp wp-config-sample.php wp-config.php
-	chown -R nginx:nginx wordpress
 	cp ${DIR}/default.conf /etc/nginx/conf.d/default.conf
+	rm -f /var/www/latest.zip
 fi
+chown -R nginx:nginx /var/www/wordpress
 
 if [ ! -d /var/www/wordpress/wp-content/plugins/sqlite-integration ]; then
 	cd /var/www/wordpress/wp-content/plugins
@@ -26,12 +27,13 @@ if [ ! -d /var/www/wordpress/wp-content/plugins/sqlite-integration ]; then
 	echo 'unziping sqlite-integration'
 	unzip sqlite-integration.1.8.1.zip > /dev/null
 	cp sqlite-integration/db.php ../db.php
+	rm -f sqlite-integration.1.8.1.zip
 fi
 
 if [ ! -d /var/wordpressdata ]; then
 	mkdir /var/wordpressdata
-	chown -R nginx:nginx /var/wordpressdata
 fi
+chown -R nginx:nginx /var/wordpressdata
 
 iptables -I INPUT -m state --state NEW -m tcp -p tcp  --dport 80 -j ACCEPT
 
